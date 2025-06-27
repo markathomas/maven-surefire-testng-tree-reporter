@@ -17,6 +17,7 @@ import static java.util.Collections.singletonList;
 
 public class TestReportHandler {
 
+    protected static final Node node = new Node("ROOT", 0);
     protected static final Map<String, Set<String>> classNames = new ConcurrentHashMap<>();
     protected static final Map<String, List<WrappedReportEntry>> classEntries = new ConcurrentHashMap<>();
     protected static final Map<String, List<WrappedReportEntry>> testEntries = new ConcurrentHashMap<>();
@@ -37,6 +38,7 @@ public class TestReportHandler {
     }
 
     public void prepare() {
+        node.addNode(report);
         if (hasNestedTests()) {
             markClassNamesForNestedTests();
         }
