@@ -1,23 +1,32 @@
 package org.apache.maven.plugin.surefire.report;
 
+import org.apache.maven.plugin.surefire.log.api.ConsoleLogger;
+import org.apache.maven.surefire.shared.lang3.StringUtils;
 import org.apache.maven.surefire.shared.utils.logging.MessageBuilder;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.LongStream;
 
 import static org.apache.maven.plugin.surefire.report.TextFormatter.abbreviateName;
+import static org.apache.maven.surefire.shared.utils.StringUtils.isBlank;
 import static org.apache.maven.surefire.shared.utils.logging.MessageUtils.buffer;
 
 public class ActualTreePrinter {
     private final Theme theme = Theme.UNICODE;
     private final Node tree;
+    private final ConsoleLogger consoleLogger;
+    private final ReporterOptions options;
 
-    public ActualTreePrinter(Node node) {
+    public ActualTreePrinter(Node node, ConsoleLogger consoleLogger, ReporterOptions options) {
         this.tree = node;
+        this.consoleLogger = consoleLogger;
+        this.options = options;
     }
 
     public void print() {
         print(tree.branches.get(0));
+        Node.getRoot().clearTree();
     }
 
     private void print(Node node) {
@@ -27,14 +36,18 @@ public class ActualTreePrinter {
     }
 
     private void printTestFormated(Node node, WrappedReportEntry testResult) {
-//        if (testResult.isErrorOrFailure()) {
-//            printFailure();
-//        } else if (testResult.isSkipped()) {
-//            printSkipped();
-//        } else if (isPrintSuccessAllowed && testResult.isSucceeded()) {
-        printSuccess(node, testResult);
-//        }
+        if (testResult.isErrorOrFailure()) {
+            printFailure(node, testResult);
+        } else if (testResult.isSkipped()) {
+            printSkipped(node, testResult);
+        } else if (isSuccessPrintAllowed() && testResult.isSucceeded()) {
+            printSuccess(node, testResult);
+        }
+        printDetails(testResult);
+    }
 
+    private boolean isSuccessPrintAllowed() {
+        return !options.isHideResultsOnSuccess();
     }
 
     private void printSuccess(Node node, WrappedReportEntry testResult) {
@@ -49,8 +62,8 @@ public class ActualTreePrinter {
     }
 
     private void println(String message) {
-//        consoleLogger.info(message);
-        System.out.println(message);
+        consoleLogger.info(message);
+        //System.out.println(message);
     }
 
     private boolean isLastMissingBranch(Node node) {
@@ -120,9 +133,97 @@ public class ActualTreePrinter {
 
         builder.a(node.getName());
 
+//TODO: Fix this, compare with the timing from the other printer (for nested class names)
 //        concatenateWithTestGroup(builder, testResult, !isBlank(testResult.getReportNameWithGroup()));
 //        builder.a(" - " + classResults.get(treeLength).elapsedTimeAsString());
 
         println(builder.toString());
+    }
+
+    private void printDetails(WrappedReportEntry testResult) {
+        boolean isSuccess = testResult.getReportEntryType() == ReportEntryType.SUCCESS;
+        boolean isError = testResult.getReportEntryType() == ReportEntryType.ERROR;
+        boolean isFailure = testResult.getReportEntryType() == ReportEntryType.FAILURE;
+
+        boolean printStackTrace = options.isPrintStacktraceOnError() && isError
+                || options.isPrintStacktraceOnFailure() && isFailure;
+        boolean printStdOut = options.isPrintStdoutOnSuccess() && isSuccess
+                || options.isPrintStdoutOnError() && isError
+                || options.isPrintStdoutOnFailure() && isFailure;
+        boolean printStdErr = options.isPrintStderrOnSuccess() && isSuccess
+                || options.isPrintStderrOnError() && isError
+                || options.isPrintStderrOnFailure() && isFailure;
+
+        if (printStackTrace || printStdOut || printStdErr) {
+            printPreambleDetails(testResult);
+            if (printStackTrace) printStackTrace(testResult);
+            if (printStdOut) printStdOut(testResult);
+            if (printStdErr) printStdErr(testResult);
+        }
+    }
+
+    private void printSkipped(Node node, WrappedReportEntry testResult) {
+        printTestResult(buffer()
+                .warning(theme.skipped() + getSkippedReport(testResult))
+                .warning(getSkippedMessage(testResult)), node, testResult);
+    }
+
+    private String getSkippedReport(WrappedReportEntry testResult) {
+        if (!isBlank(testResult.getReportName())) {
+            return abbreviateName(testResult.getReportName());
+        } else {
+            return testResult.getReportSourceName();
+        }
+    }
+
+    private String getSkippedMessage(WrappedReportEntry testResult) {
+        if (!isBlank(testResult.getMessage())) {
+            return " (" + testResult.getMessage() + ")";
+        } else {
+            return "";
+        }
+    }
+
+    private void printPreambleDetails(WrappedReportEntry testResult) {
+        println("");
+        if (testResult.isSucceeded()) {
+            println(buffer().success(theme.details()).success(abbreviateName(testResult.getReportName())).toString());
+        } else {
+            println(buffer().failure(theme.details()).failure(abbreviateName(testResult.getReportName())).toString());
+        }
+    }
+
+    private void printStdOut(WrappedReportEntry testResult) {
+        println("");
+        println(buffer().strong("Standard out").toString());
+        try {
+            testResult.getStdout().writeTo(System.out);
+        } catch (final IOException ignored) {
+        }
+    }
+
+    private void printStdErr(WrappedReportEntry testResult) {
+        println("");
+        println(buffer().strong("Standard error").toString());
+        try {
+            testResult.getStdErr().writeTo(System.err);
+        } catch (final IOException ignored) {
+        }
+    }
+
+    private void printStackTrace(WrappedReportEntry testResult) {
+        println("");
+        println(buffer().strong("Stack trace").toString());
+        String stackTrace = testResult.getStackTrace(false);
+        if (stackTrace != null && !StringUtils.isBlank(stackTrace)) {
+            println(testResult.getStackTrace(false));
+        } else {
+            println("[No stack trace available]");
+        }
+    }
+
+    private void printFailure(Node node, WrappedReportEntry testResult) {
+        printTestResult(buffer()
+                .failure(theme.failed() + abbreviateName(testResult.getReportName())), node, testResult);
     }
 }

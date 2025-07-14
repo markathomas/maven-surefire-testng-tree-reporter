@@ -77,15 +77,14 @@ public class TreePrinter {
     }
 
     public void printTests() {
-        testSetStats
-                .stream()
-                .map(TestPrinter::new)
-                .forEach(printer -> {
-                    printer.printTest(isSuccessPrintAllowed());
-                    printer.printDetails();
-                });
-        new ActualTreePrinter(Node.getRoot()).print();
-        Node.getRoot().clearTree();
+//        testSetStats
+//                .stream()
+//                .map(TestPrinter::new)
+//                .forEach(printer -> {
+//                    printer.printTest(isSuccessPrintAllowed());
+//                    printer.printDetails();
+//                });
+        new ActualTreePrinter(Node.getRoot(), consoleLogger, options).print();
     }
 
     private boolean isSuccessPrintAllowed() {
