@@ -84,6 +84,8 @@ public class TreePrinter {
                     printer.printTest(isSuccessPrintAllowed());
                     printer.printDetails();
                 });
+        new ActualTreePrinter(Node.getRoot()).print();
+        Node.getRoot().clearTree();
     }
 
     private boolean isSuccessPrintAllowed() {

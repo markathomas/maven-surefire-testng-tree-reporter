@@ -42,21 +42,16 @@ public class TestReportHandler {
     public void print(BiFunction<List<WrappedReportEntry>, List<WrappedReportEntry>, TreePrinter> getTreePrinter) {
         if (testSetStats != null) {
             testSetStats.getReportEntries()
-                    .forEach(entry -> node.getBranchNode(node, getTestClassPath(entry.getSourceName())).get().wrappedReportEntries.add(entry));
+                    .forEach(entry -> Node.getBranchNode(node, getTestClassPath(entry.getSourceName())).get().wrappedReportEntries.add(entry));
         }
         if (isMarkedAsNestedTest()) {
             prepareEntriesForNestedTests();
             if (isNestedTestReadyToPrint()) {
                 printNestedTests(getTreePrinter);
-                printTestTree();
             }
         } else {
             printTests(getTreePrinter);
         }
-    }
-
-    private void printTestTree() {
-        new ActualTreePrinter(node).print();
     }
 
     List<String> getTestClassPath(String sourceName) {

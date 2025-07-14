@@ -16,6 +16,10 @@ public class Node {
     private final int depth;
     public final List<WrappedReportEntry> wrappedReportEntries = new ArrayList<>();
 
+    public void clearTree() {
+        ROOT.branches.clear();
+    }
+
     public String getName() {
         return name;
     }
@@ -26,6 +30,10 @@ public class Node {
 
     public static Node getRoot() {
         return ROOT;
+    }
+
+    public boolean hasBranches() {
+       return !branches.isEmpty();
     }
 
     private Node(String name, int nestLevel) {
@@ -91,6 +99,12 @@ public class Node {
         if (node.getBranchNode(nodePath.get(0)).isPresent())
             return getBranchNode(node.getBranchNode(nodePath.get(0)).get(), nodePath.subList(1, nodePath.size()));
         return Optional.empty();
+    }
+
+    public Optional<Node> getParent(String parentName) {
+        if (parent == null) return Optional.empty();
+        if (parent.getName().equals(parentName)) return Optional.of(parent);
+        return parent.getParent(parentName);
     }
 
     @Override

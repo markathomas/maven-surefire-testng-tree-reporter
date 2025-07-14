@@ -28,7 +28,7 @@ public class SurefireEmulator {
     private final ConsoleTreeReporter consoleTreeReporter;
 
     public SurefireEmulator(Class<?> clazz) {
-        this(ReporterOptions.builder().build(), clazz);
+        this(ReporterOptions.builder().theme(Theme.UNICODE).build(), clazz);
     }
 
     public SurefireEmulator(ReporterOptions reporterOptions, Class<?> clazz) {

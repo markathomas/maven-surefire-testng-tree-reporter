@@ -114,6 +114,7 @@ class ConsoleTreeReporterTest {
         SimpleReportEntry simpleReportEntry2 = new SimpleReportEntry(RunMode.NORMAL_RUN, 123L, "NestedExampleTest$InnerTest", "Inner Test", null, null);
         SimpleReportEntry simpleReportEntry3 = new SimpleReportEntry(RunMode.NORMAL_RUN, 123L, "NestedExampleTest$InnerTest$InnerInnerTest", "Inner Inner Test", null, null);
         SimpleReportEntry simpleReportEntry4 = new SimpleReportEntry(RunMode.NORMAL_RUN, 123L, "NestedExampleTest$InnerTest$InnerInnerTest$InnerInnerInnerTest", "Inner Inner Inner Test", null, null);
+        SimpleReportEntry simpleReportEntry5 = new SimpleReportEntry(RunMode.NORMAL_RUN, 123L, "NestedExampleTest$FirstInnerTest", "First Inner Test", null, null);
 
         SimpleReportEntry firstTest = new SimpleReportEntry(RunMode.NORMAL_RUN, 123L, "NestedExampleTest", "Nested Sample", "test", "Should not be displayed");
         WrappedReportEntry wrappedReportEntry1 = new WrappedReportEntry(firstTest, ReportEntryType.SUCCESS, 1, stdout, stderr);
@@ -149,10 +150,12 @@ class ConsoleTreeReporterTest {
         consoleTreeReporter.testSetStarting(simpleReportEntry2);
         consoleTreeReporter.testSetStarting(simpleReportEntry3);
         consoleTreeReporter.testSetStarting(simpleReportEntry4);
+        consoleTreeReporter.testSetStarting(simpleReportEntry5);
         consoleTreeReporter.testSetCompleted(wrappedReportEntry5, testSetStats, null);
         consoleTreeReporter.testSetCompleted(wrappedReportEntry4, testSetStatsForClass, null);
         consoleTreeReporter.testSetCompleted(wrappedReportEntry3, testSetStatsForClass, null);
         consoleTreeReporter.testSetCompleted(wrappedReportEntry2, testSetStatsForClass, null);
+        consoleTreeReporter.testSetCompleted(wrappedReportEntry6, testSetStatsForClass, null);
 
     }
 
