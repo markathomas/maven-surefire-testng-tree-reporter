@@ -1,5 +1,7 @@
 package org.apache.maven.plugin.surefire.report;
 
+import java.util.List;
+
 import org.apache.maven.plugin.surefire.NestedExampleTest;
 import org.apache.maven.plugin.surefire.log.PluginConsoleLogger;
 import org.apache.maven.surefire.api.report.RunMode;
@@ -7,10 +9,8 @@ import org.apache.maven.surefire.api.report.SimpleReportEntry;
 import org.codehaus.plexus.DefaultPlexusContainer;
 import org.codehaus.plexus.PlexusContainerException;
 import org.codehaus.plexus.logging.Logger;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-
-import java.util.List;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,7 +23,7 @@ class ConsoleTreeReporterTest {
     static DefaultPlexusContainer container;
     static Logger logger;
 
-    @BeforeAll
+    @BeforeClass
     static void setupContainer() throws PlexusContainerException {
         container = new DefaultPlexusContainer();
         logger = container.getLogger();

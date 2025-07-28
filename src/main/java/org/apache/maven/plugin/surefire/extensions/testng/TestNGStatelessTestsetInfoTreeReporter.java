@@ -1,5 +1,6 @@
-package org.apache.maven.plugin.surefire.extensions.junit5;
+package org.apache.maven.plugin.surefire.extensions.testng;
 
+import org.apache.maven.plugin.surefire.extensions.SurefireStatelessTestsetInfoReporter;
 import org.apache.maven.plugin.surefire.loader.SurefireClassLoaderModifier;
 import org.apache.maven.plugin.surefire.log.api.ConsoleLogger;
 import org.apache.maven.plugin.surefire.report.ConsoleTreeReporter;
@@ -10,13 +11,13 @@ import org.apache.maven.plugin.surefire.report.WrappedReportEntry;
 import org.apache.maven.surefire.extensions.StatelessTestsetInfoConsoleReportEventListener;
 
 /**
- * Extension of {@link JUnit5StatelessTestsetInfoReporter file and console
- * reporter of test-set} for JUnit5.
+ * Extension of {@link SurefireStatelessTestsetInfoReporter file and console
+ * reporter of test-set} for TestNG.
  *
  * @author <a href="mailto:fabriciorby@hotmail.com">Fabrício Yamamoto
  *         (fabriciorby)</a>
  */
-public class JUnit5StatelessTestsetInfoTreeReporter extends JUnit5StatelessTestsetInfoReporter {
+public class TestNGStatelessTestsetInfoTreeReporter extends SurefireStatelessTestsetInfoReporter {
     private boolean printStacktraceOnError;
     private boolean printStacktraceOnFailure;
     private boolean printStderrOnError;
@@ -26,7 +27,34 @@ public class JUnit5StatelessTestsetInfoTreeReporter extends JUnit5StatelessTests
     private boolean printStdoutOnFailure;
     private boolean printStdoutOnSuccess;
     private boolean hideResultsOnSuccess;
+    private boolean usePhrasedFileName;
+    private boolean usePhrasedClassNameInRunning;
+    private boolean usePhrasedClassNameInTestCaseSummary;
     private Theme theme = Theme.ASCII;
+
+    public boolean isUsePhrasedFileName() {
+        return this.usePhrasedFileName;
+    }
+
+    public void setUsePhrasedFileName(boolean usePhrasedFileName) {
+        this.usePhrasedFileName = usePhrasedFileName;
+    }
+
+    public boolean isUsePhrasedClassNameInRunning() {
+        return this.usePhrasedClassNameInRunning;
+    }
+
+    public void setUsePhrasedClassNameInRunning(boolean usePhrasedClassNameInRunning) {
+        this.usePhrasedClassNameInRunning = usePhrasedClassNameInRunning;
+    }
+
+    public boolean isUsePhrasedClassNameInTestCaseSummary() {
+        return this.usePhrasedClassNameInTestCaseSummary;
+    }
+
+    public void setUsePhrasedClassNameInTestCaseSummary(boolean usePhrasedClassNameInTestCaseSummary) {
+        this.usePhrasedClassNameInTestCaseSummary = usePhrasedClassNameInTestCaseSummary;
+    }
 
     @Override
     public Object clone(ClassLoader target) {
@@ -50,6 +78,9 @@ public class JUnit5StatelessTestsetInfoTreeReporter extends JUnit5StatelessTests
             cls.getMethod("setPrintStdoutOnFailure", boolean.class).invoke(clone, isPrintStdoutOnFailure());
             cls.getMethod("setPrintStdoutOnSuccess", boolean.class).invoke(clone, isPrintStdoutOnSuccess());
             cls.getMethod("setHideResultsOnSuccess", boolean.class).invoke(clone, isPrintStdoutOnSuccess());
+            cls.getMethod("setUsePhrasedFileName", boolean.class).invoke(clone, this.isUsePhrasedFileName());
+            cls.getMethod("setUsePhrasedClassNameInTestCaseSummary", boolean.class).invoke(clone, this.isUsePhrasedFileName());
+            cls.getMethod("setUsePhrasedClassNameInRunning", boolean.class).invoke(clone, this.isUsePhrasedFileName());
             cls.getMethod("setTheme", themeClass).invoke(clone, clonedTheme);
 
             return clone;
@@ -59,8 +90,7 @@ public class JUnit5StatelessTestsetInfoTreeReporter extends JUnit5StatelessTests
     }
 
     @Override
-    public StatelessTestsetInfoConsoleReportEventListener<WrappedReportEntry, TestSetStats> createListener(
-            ConsoleLogger logger) {
+    public StatelessTestsetInfoConsoleReportEventListener<WrappedReportEntry, TestSetStats> createListener(ConsoleLogger logger) {
         return new ConsoleTreeReporter(logger, newReporterOptions());
     }
 
@@ -144,14 +174,23 @@ public class JUnit5StatelessTestsetInfoTreeReporter extends JUnit5StatelessTests
         this.theme = theme;
     }
 
-    @Override
     public String toString() {
-        return this.getClass().getSimpleName() + "{"
-                + "disable=" + isDisable()
-                + ", usePhrasedFileName=" + isUsePhrasedFileName()
-                + ", usePhrasedClassNameInRunning=" + isUsePhrasedClassNameInRunning()
-                + ", usePhrasedClassNameInTestCaseSummary=" + isUsePhrasedClassNameInTestCaseSummary()
-                + "}";
+        return this.getClass().getSimpleName() + "{" +
+          "disable=" + isDisable() +
+          ", printStacktraceOnError=" + printStacktraceOnError +
+          ", printStacktraceOnFailure=" + printStacktraceOnFailure +
+          ", printStderrOnError=" + printStderrOnError +
+          ", printStderrOnFailure=" + printStderrOnFailure +
+          ", printStderrOnSuccess=" + printStderrOnSuccess +
+          ", printStdoutOnError=" + printStdoutOnError +
+          ", printStdoutOnFailure=" + printStdoutOnFailure +
+          ", printStdoutOnSuccess=" + printStdoutOnSuccess +
+          ", hideResultsOnSuccess=" + hideResultsOnSuccess +
+          ", usePhrasedFileName=" + usePhrasedFileName +
+          ", usePhrasedClassNameInRunning=" + usePhrasedClassNameInRunning +
+          ", usePhrasedClassNameInTestCaseSummary=" + usePhrasedClassNameInTestCaseSummary +
+          ", theme=" + theme +
+          '}';
     }
 
     private ReporterOptions newReporterOptions() {

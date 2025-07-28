@@ -1,15 +1,15 @@
-# Maven Surefire JUnit5 TreeView Extension
+# Maven Surefire TestNG TreeView Extension
 
 If you are a Maven Surefire user and ever wanted a fancy tree output for your tests instead of a bunch of logs, you absolutely should try this.
 
-This is a dependency for [maven-surefire-plugin](https://maven.apache.org/surefire/maven-surefire-plugin/), it adds a tree view for the unit tests executed using JUnit5.
+This is a dependency for [maven-surefire-plugin](https://maven.apache.org/surefire/maven-surefire-plugin/), it adds a tree view for the unit tests executed using TestNG.
 
-[![Maven Central](https://img.shields.io/maven-central/v/me.fabriciorby/maven-surefire-junit5-tree-reporter?style=for-the-badge)](https://search.maven.org/artifact/me.fabriciorby/maven-surefire-junit5-tree-reporter)
+[![Maven Central](https://img.shields.io/maven-central/v/me.fabriciorby/maven-surefire-testng-tree-reporter?style=for-the-badge)](https://search.maven.org/artifact/me.fabriciorby/maven-surefire-testng-tree-reporter)
 [![Apache License, Version 2.0, January 2004](https://img.shields.io/github/license/apache/maven.svg?label=License&style=for-the-badge)](http://www.apache.org/licenses/LICENSE-2.0)
 
 ## Installation
 
-The Maven Repository can be found [here](https://mvnrepository.com/artifact/me.fabriciorby/maven-surefire-junit5-tree-reporter).
+The Maven Repository can be found [here](https://mvnrepository.com/artifact/com.elihullc/maven-surefire-testng-tree-reporter).
 
 Configure your POM like the following
 
@@ -19,8 +19,8 @@ Configure your POM like the following
     <version>3.3.1</version>
     <dependencies>
         <dependency>
-            <groupId>me.fabriciorby</groupId>
-            <artifactId>maven-surefire-junit5-tree-reporter</artifactId>
+            <groupId>com.elihullc</groupId>
+            <artifactId>maven-surefire-testng-tree-reporter</artifactId>
             <version>1.4.0</version>
         </dependency>
     </dependencies>
@@ -30,7 +30,7 @@ Configure your POM like the following
             <disable>true</disable>
         </consoleOutputReporter>
         <statelessTestsetInfoReporter
-                implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5StatelessTestsetInfoTreeReporter">
+                implementation="org.apache.maven.plugin.surefire.extensions.testng.TestNGStatelessTestsetInfoTreeReporter">
         </statelessTestsetInfoReporter>
     </configuration>
 </plugin>
@@ -43,7 +43,7 @@ The output can be printed using two Themes: UNICODE and ASCII (by default).
 ### UNICODE
 ```xml
 <statelessTestsetInfoReporter
-        implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5StatelessTestsetInfoTreeReporter">
+        implementation="org.apache.maven.plugin.surefire.extensions.testng.TestNGStatelessTestsetInfoTreeReporter">
     <theme>UNICODE</theme>
 </statelessTestsetInfoReporter>
 ```
@@ -53,7 +53,7 @@ The output can be printed using two Themes: UNICODE and ASCII (by default).
 ### ASCII
 ```xml
 <statelessTestsetInfoReporter
-        implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5StatelessTestsetInfoTreeReporter">
+        implementation="org.apache.maven.plugin.surefire.extensions.testng.TestNGStatelessTestsetInfoTreeReporter">
     <theme>ASCII</theme>
 </statelessTestsetInfoReporter>
 ```
@@ -67,7 +67,7 @@ To reduce verbosity, you can a _hide successful results_ option can be configure
 
 ```xml
 <statelessTestsetInfoReporter
-        implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5StatelessTestsetInfoTreeReporter">
+        implementation="org.apache.maven.plugin.surefire.extensions.testng.TestNGStatelessTestsetInfoTreeReporter">
     <hideResultsOnSuccess>true</hideResultsOnSuccess>
 </statelessTestsetInfoReporter>
 ```
@@ -78,7 +78,7 @@ By default, `<consoleOutputReporter><disable>true</disable></consoleOutputReport
 
 ```xml
 <statelessTestsetInfoReporter
-        implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5StatelessTestsetInfoTreeReporter">
+        implementation="org.apache.maven.plugin.surefire.extensions.testng.TestNGStatelessTestsetInfoTreeReporter">
     <printStacktraceOnError>true</printStacktraceOnError>
     <printStacktraceOnFailure>true</printStacktraceOnFailure>
     <printStdoutOnError>true</printStdoutOnError>

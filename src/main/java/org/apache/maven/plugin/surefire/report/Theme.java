@@ -26,7 +26,7 @@ import java.nio.charset.StandardCharsets;
  * Theme to use when printing using the TreePrinter.
  *
  * @author <a href="mailto:fabriciorby@hotmail.com">Fabrício Yamamoto</a>
- * @see <a href="https://github.com/junit-team/junit5/blob/main/junit-platform-console/src/main/java/org/junit/platform/console/options/Theme.java">Used reference</a>
+ * @see <a href="https://github.com/junit-team/testng/blob/main/junit-platform-console/src/main/java/org/junit/platform/console/options/Theme.java">Used reference</a>
  */
 public enum Theme {
 

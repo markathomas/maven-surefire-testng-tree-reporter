@@ -1,33 +1,31 @@
 package org.apache.maven.plugin.surefire;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
+import org.testng.Assert;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-@DisplayName("Parameterized Sample Test")
 public class ParameterizedExampleTest {
 
-    @Test
-    @DisplayName("1 + 1 = 2")
+    @Test(description = "1 + 1 = 2")
     void addsTwoNumbers() {
         Calculator calculator = new Calculator();
-        assertEquals(2, calculator.add(1, 1), "1 + 1 should equal 2");
+        Assert.assertEquals(calculator.add(1, 1), 2, "1 + 1 should equal 2");
     }
 
-    @ParameterizedTest(name = "{0} + {1} = {2}")
-    @CsvSource({
-            "0,    1,   1",
-            "1,    2,   3",
-            "49,  51, 100",
-            "1,  100, 101"
-    })
+    @DataProvider(name = "add")
+    public static Object[][] add() {
+        return new Object[][] {
+          { 1,    2,   3 },
+          { 49,  51, 100 },
+          { 1,  100, 101 }
+        };
+    }
+
+    @Test(description = "{0} + {1} = {2}", dataProvider = "add")
     void add(int first, int second, int expectedResult) {
         Calculator calculator = new Calculator();
-        assertEquals(expectedResult, calculator.add(first, second),
-                () -> first + " + " + second + " should equal " + expectedResult);
+        Assert.assertEquals(expectedResult, calculator.add(first, second),
+          first + " + " + second + " should equal " + expectedResult);
     }
 
     static class Calculator {

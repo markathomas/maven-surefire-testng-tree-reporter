@@ -1,15 +1,9 @@
 package org.apache.maven.plugin.surefire;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.testng.Assert;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
-import java.util.stream.Stream;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-@DisplayName("Long Name Sample Test")
 public class LongNameExampleTest {
 
     static final String[] sonnet133 = {
@@ -62,18 +56,17 @@ public class LongNameExampleTest {
             "Till my bad angel fire my good one out.\r\n"
     };
 
-    static Stream<Arguments> shakespeare() {
-        return Stream.of(
-                Arguments.of((Object) sonnet133),
-                Arguments.of((Object) sonnet138),
-                Arguments.of((Object) sonnet144)
-        );
+    @DataProvider(name = "shakespeare")
+    public static Object[][] shakespeare() {
+        return new Object[][] {
+          sonnet133,
+          sonnet138,
+          sonnet144
+        };
     }
 
-    @ParameterizedTest
-    @MethodSource
-    @DisplayName("Test normalization and abbreviation of test report")
+    @Test(description = "Test normalization and abbreviation of test report", dataProvider = "shakespeare")
     void shakespeare(String[] sonnets) {
-        assertTrue(true);
+        Assert.assertTrue(true);
     }
 }

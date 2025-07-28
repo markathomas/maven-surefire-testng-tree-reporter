@@ -1,7 +1,5 @@
 package org.apache.maven.plugin.surefire.report;
 
-import org.apache.maven.surefire.api.report.ReportEntry;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -11,6 +9,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
+
+import org.apache.maven.surefire.api.report.ReportEntry;
 
 import static java.util.Collections.singleton;
 import static java.util.Collections.singletonList;

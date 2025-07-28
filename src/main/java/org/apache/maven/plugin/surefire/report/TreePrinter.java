@@ -19,14 +19,14 @@
 
 package org.apache.maven.plugin.surefire.report;
 
-import org.apache.maven.plugin.surefire.log.api.ConsoleLogger;
-import org.apache.maven.surefire.shared.lang3.StringUtils;
-import org.apache.maven.surefire.shared.utils.logging.MessageBuilder;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.LongStream;
+
+import org.apache.maven.plugin.surefire.log.api.ConsoleLogger;
+import org.apache.maven.surefire.shared.lang3.StringUtils;
+import org.apache.maven.surefire.shared.utils.logging.MessageBuilder;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;

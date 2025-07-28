@@ -1,27 +1,24 @@
 package org.apache.maven.plugin.surefire.report;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.apache.maven.plugin.surefire.log.PluginConsoleLogger;
 import org.apache.maven.surefire.api.report.RunMode;
 import org.apache.maven.surefire.api.report.SimpleReportEntry;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.DisplayNameGenerator;
-import org.junit.platform.commons.util.StringUtils;
-
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Method;
-import java.util.*;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
-import static org.junit.jupiter.api.DisplayNameGenerator.getDisplayNameGenerator;
-import static org.junit.platform.commons.util.AnnotationUtils.findAnnotation;
 
 public class SurefireEmulator {
 
     private final EmulatorLogger emulatorLogger = new EmulatorLogger();
-    private final DisplayNameGenerator displayNameGenerator = getDisplayNameGenerator(DisplayNameGenerator.Standard.class);
     private final Utf8RecodingDeferredFileOutputStream stdout = new Utf8RecodingDeferredFileOutputStream("stdout");
     private final Utf8RecodingDeferredFileOutputStream stderr = new Utf8RecodingDeferredFileOutputStream("stderr");
     private final Class<?> clazz;
@@ -110,25 +107,14 @@ public class SurefireEmulator {
                         (x, y) -> y, LinkedHashMap::new));
     }
 
-    // Got the methods below from JUnit Jupiter codebase DisplayNameUtils.java
-    private String getDisplayName(AnnotatedElement element, Supplier<String> displayNameSupplier) {
-        Optional<DisplayName> displayNameAnnotation = findAnnotation(element, DisplayName.class);
-        if (displayNameAnnotation.isPresent()) {
-            String displayName = displayNameAnnotation.get().value().trim();
-            if (!StringUtils.isBlank(displayName)) return displayName;
-        }
-        return displayNameSupplier.get();
-    }
-
     private <T> String getClassDisplayName(Class<T> clazz) {
-        if (clazz.getEnclosingClass() == null) {
-            return getDisplayName(clazz, () -> displayNameGenerator.generateDisplayNameForClass(clazz));
-        } else {
-            return getDisplayName(clazz, () -> displayNameGenerator.generateDisplayNameForNestedClass(clazz));
-        }
+        final String name = clazz.getName();
+        return name.substring(name.lastIndexOf(".") + 1);
     }
 
     private <T> String getMethodDisplayName(Class<T> clazz, Method method) {
-        return getDisplayName(method, () -> displayNameGenerator.generateDisplayNameForMethod(clazz, method));
+        final String params = '(' + Stream.of(method.getParameterTypes()).map(Class::getSimpleName)
+          .collect(Collectors.joining(", ")) + ')';
+        return method.getName() + params;
     }
 }

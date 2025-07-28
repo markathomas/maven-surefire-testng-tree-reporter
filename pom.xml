@@ -4,30 +4,29 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>me.fabriciorby</groupId>
-    <artifactId>maven-surefire-junit5-tree-reporter</artifactId>
-    <version>1.4.0</version>
+    <groupId>com.elihullc</groupId>
+    <artifactId>maven-surefire-testng-tree-reporter</artifactId>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>maven-surefire-junit5-tree-reporter</name>
-    <description>Tree view reports for Maven Surefire JUnit5 plugin. :^)</description>
-    <url>https://github.com/fabriciorby/maven-surefire-junit5-tree-reporter</url>
+    <name>maven-surefire-testng-tree-reporter</name>
+    <description>Tree view reports for Maven Surefire TestNG plugin. :^)</description>
+    <url>https://github.com/fabriciorby/maven-surefire-testng-tree-reporter</url>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.surefire.version>3.3.1</maven.surefire.version>
         <maven-surefire.testsetInfoReporter>
-            org.apache.maven.plugin.surefire.extensions.junit5.JUnit5StatelessTestsetInfoTreeReporter
+            org.apache.maven.plugin.surefire.extensions.testng.TestNGStatelessTestsetInfoTreeReporter
         </maven-surefire.testsetInfoReporter>
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
         <maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
-        <nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
+        <nexus-staging-maven-plugin.version>1.7.0</nexus-staging-maven-plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <mockito-bom.version>4.11.0</mockito-bom.version>
-        <junit-bom.version>5.9.3</junit-bom.version>
     </properties>
 
     <dependencyManagement>
@@ -39,21 +38,9 @@
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
-            <dependency>
-                <groupId>org.junit</groupId>
-                <artifactId>junit-bom</artifactId>
-                <version>${junit-bom.version}</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
         </dependencies>
     </dependencyManagement>
     <dependencies>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>org.apache.maven.surefire</groupId>
             <artifactId>surefire-api</artifactId>
@@ -87,7 +74,19 @@
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
-            <version>5.1.0</version>
+            <version>7.0.0</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>33.4.8-jre</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -100,6 +99,12 @@
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
             <version>3.26.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.9.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -117,20 +122,37 @@
             <name>Fabrício Yamamoto</name>
             <email>fabriciorby@hotmail.com</email>
         </developer>
+        <developer>
+            <name>Mark Thomas</name>
+            <id>mthomas</id>
+            <email>mthomas@elihullc.com</email>
+            <url>https://www.linkedin.com/in/spatialguru/</url>
+            <organization>Elihu, LLC</organization>
+            <organizationUrl>https://www.elihullc.com</organizationUrl>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>-5</timezone>
+            <properties>
+                <picUrl>https://media.licdn.com/media/p/3/000/01b/0a7/34dd294.jpg</picUrl>
+            </properties>
+        </developer>
     </developers>
 
     <issueManagement>
         <system>GitHub</system>
-        <url>https://github.com/fabriciorby/maven-surefire-junit5-tree-reporter/issues</url>
+        <url>https://github.com/markathomas/maven-surefire-testng-tree-reporter/issues</url>
     </issueManagement>
 
     <scm>
-        <connection>scm:git:git://github.com:fabriciorby/maven-surefire-junit5-tree-reporter.git</connection>
-        <developerConnection>scm:git:ssh://github.com:fabriciorby/maven-surefire-junit5-tree-reporter.git</developerConnection>
-        <url>https://github.com/fabriciorby/maven-surefire-junit5-tree-reporter</url>
+        <connection>scm:git:git://github.com:markathomas/maven-surefire-testng-tree-reporter.git</connection>
+        <developerConnection>scm:git:ssh://github.com:markathomas/maven-surefire-testng-tree-reporter.git</developerConnection>
+        <url>https://github.com/markathomas/maven-surefire-testng-tree-reporter</url>
     </scm>
 
     <distributionManagement>
+        <downloadUrl>https://github.com/markathomas/maven-surefire-testng-tree-reporter</downloadUrl>
         <snapshotRepository>
             <id>maven-central</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
@@ -148,8 +170,8 @@
                 <version>${maven.surefire.version}</version>
                 <dependencies>
                     <dependency>
-                        <groupId>me.fabriciorby</groupId>
-                        <artifactId>maven-surefire-junit5-tree-reporter</artifactId>
+                        <groupId>com.elihullc</groupId>
+                        <artifactId>maven-surefire-testng-tree-reporter</artifactId>
                         <version>${project.version}</version>
                     </dependency>
                 </dependencies>
@@ -205,36 +227,49 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>${maven-gpg-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                        <configuration>
-                            <gpgArguments>
-                                <arg>--pinentry-mode</arg>
-                                <arg>loopback</arg>
-                            </gpgArguments>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
                 <version>${nexus-staging-maven-plugin.version}</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <serverId>maven-central</serverId>
+                    <serverId>ossrh</serverId>
                     <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+
+        <!-- Maven Central requires signed artifacts -->
+        <profile>
+            <id>sign</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>${maven-gpg-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <configuration>
+                                    <gpgArguments>
+                                        <arg>--pinentry-mode</arg>
+                                        <arg>loopback</arg>
+                                    </gpgArguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
 </project>

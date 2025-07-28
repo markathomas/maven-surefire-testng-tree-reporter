@@ -5,7 +5,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.stream.Stream;
 
-import org.apache.maven.plugin.surefire.extensions.junit5.JUnit5StatelessTestsetInfoReporter;
+import org.apache.maven.plugin.surefire.extensions.SurefireStatelessTestsetInfoReporter;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -28,7 +28,7 @@ import org.apache.maven.plugin.surefire.extensions.junit5.JUnit5StatelessTestset
 
 /**
  * Class created to modify the Surefire ClassLoader during Runtime.
- * Needed for {@link JUnit5StatelessTestsetInfoReporter#clone()} method,
+ * Needed for {@link SurefireStatelessTestsetInfoReporter#clone()} method,
  * which is used when the unit tests are running using multiple threads.
  *
  * @author <a href="mailto:fabriciorby@hotmail.com">Fabrício Yamamoto (fabriciorby)</a>
@@ -38,7 +38,7 @@ public class SurefireClassLoaderModifier {
     private final ClassLoader surefireClassLoader;
     private final Method addUrlMethod;
 
-    public static final String MAVEN_SUREFIRE_JUNIT_5_TREE_REPORTER = "maven-surefire-junit5-tree-reporter";
+    public static final String MAVEN_SUREFIRE_TESTNG_TREE_REPORTER = "maven-surefire-testng-tree-reporter";
     public static final String ADD_URL_METHOD = "addURL";
 
     public SurefireClassLoaderModifier(ClassLoader surefireClassLoader) throws NoSuchMethodException {
@@ -63,6 +63,6 @@ public class SurefireClassLoaderModifier {
     }
 
     private boolean isMavenSurefireTreeReporterJar(URL url) {
-        return url.getFile().contains(MAVEN_SUREFIRE_JUNIT_5_TREE_REPORTER);
+        return url.getFile().contains(MAVEN_SUREFIRE_TESTNG_TREE_REPORTER);
     }
 }

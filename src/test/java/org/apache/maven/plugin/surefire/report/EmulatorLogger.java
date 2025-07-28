@@ -1,10 +1,10 @@
 package org.apache.maven.plugin.surefire.report;
 
-import org.codehaus.plexus.logging.AbstractLogger;
-import org.codehaus.plexus.logging.Logger;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.codehaus.plexus.logging.AbstractLogger;
+import org.codehaus.plexus.logging.Logger;
 
 // Copy from org.codehaus.plexus.logging.console.ConsoleLogger so we can extend it
 
